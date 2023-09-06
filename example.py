@@ -1,11 +1,18 @@
 import metapy
 
 def tokens_lowercase(doc):
-    #Write a token stream that tokenizes with ICUTokenizer (use the argument "suppress_tags=True"), 
-    #lowercases, removes words with less than 2 and more than 5  characters
+    #Write a token stream that tokenizes with ICUTokenizer (use the argument "suppress_tags=True"), // Done
+    #lowercases, removes words with less than 2 and more than 5  characters //Done
     #performs stemming and creates trigrams (name the final call to ana.analyze as "trigrams")
     '''Place your code here'''
-    
+    tok = metapy.analyzers.ICUTokenizer(suppress_tags=True)
+    tok = metapy.analyzers.LengthFilter(tok, min=2, max=5)
+    tok = metapy.analyzers.LowercaseFilter(tok)
+    tok = metapy.analyzers.Porter2Filter(tok)
+    tok.set_content(doc.content())
+    ana = metapy.analyzers.NGramWordAnalyzer(3, tok)
+    trigrams = ana.analyze(doc)
+
     #leave the rest of the code as is
     tok.set_content(doc.content())
     tokens, counts = [], []
@@ -20,3 +27,4 @@ if __name__ == '__main__':
     print(doc.content()) #you can access the document string with .content()
     tokens = tokens_lowercase(doc)
     print(tokens)
+
